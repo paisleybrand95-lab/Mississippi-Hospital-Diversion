@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Android AndroidManifest.xml additions for MS Hospital Diversion
+  ───────────────────────────────────────────────────────────────
+  After running: npx cap add android
+
+  Open android/app/src/main/AndroidManifest.xml
+  and merge these <uses-permission> lines inside the <manifest> tag,
+  ABOVE the <application> block.
+
+  Capacitor injects most of these automatically, but verify they exist.
+-->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.msems.hospitaldiversion">
+
+  <!-- ── Network ───────────────────────────────────────── -->
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+  <!-- ── GPS / Location ────────────────────────────────── -->
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+  <!-- ── Notifications ─────────────────────────────────── -->
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.VIBRATE" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+  <!-- ── Wake Lock (keep screen on for active EMS crews) ── -->
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+  <!--
+    Inside your <application> block, add:
+
+    android:label="MS Diversion"
+    android:theme="@style/AppTheme.NoActionBar"
+
+    And this activity attribute for full-screen dark mode:
+    android:windowSoftInputMode="adjustResize"
+  -->
+
+</manifest>

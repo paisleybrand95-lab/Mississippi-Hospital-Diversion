@@ -41,16 +41,54 @@ Built for ambulance crews, charge nurses, and EMS supervisors across the state o
 ## Getting Started
 
 ```bash
+# Install dependencies (React + Capacitor)
 npm install
+
+# Run in browser
 npm start
+
+# Build + sync to native apps
+npm run cap:build
+
+# Open in Xcode (iOS)
+npm run cap:ios
+
+# Open in Android Studio
+npm run cap:android
 ```
+
+See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for the full step-by-step App Store submission guide.
 
 ## Tech Stack
 
 - React 18
+- Capacitor 8 (iOS + Android native wrapper)
 - Pure CSS-in-JS (no external UI library)
 - Haversine GPS distance calculation
-- Browser Geolocation API
+- `@capacitor/geolocation` — native GPS access
+- `@capacitor/local-notifications` — diversion alerts
+- `@capacitor/status-bar` + `@capacitor/splash-screen`
+
+## Project Structure
+
+```
+├── src/
+│   ├── App.jsx                        ← Full app (role auth, GPS, admin)
+│   └── index.js                       ← React entry point
+├── public/
+│   └── index.html                     ← Mobile-optimized shell
+├── ios-config/
+│   └── Info.plist.additions           ← iOS permissions (GPS, notifications)
+├── android-config/
+│   ├── AndroidManifest.additions.xml  ← Android permissions
+│   ├── colors.xml                     ← Dark theme colors
+│   └── styles.xml                     ← Dark status bar
+├── store-metadata/
+│   └── app-store-listing.md           ← App Store & Play Store copy
+├── capacitor.config.ts                ← Capacitor configuration
+├── DEPLOYMENT.md                      ← Full submission guide
+└── package.json
+```
 
 ## Author
 

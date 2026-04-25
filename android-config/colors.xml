@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android Theme — MS Hospital Diversion
+  ──────────────────────────────────────
+  Place this file at:
+  android/app/src/main/res/values/colors.xml
+  (Replace existing file content)
+-->
+<resources>
+    <color name="colorPrimary">#c62828</color>
+    <color name="colorPrimaryDark">#06090f</color>
+    <color name="colorAccent">#c62828</color>
+    <color name="ic_launcher_background">#06090f</color>
+</resources>

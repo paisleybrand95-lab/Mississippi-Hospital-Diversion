@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+
+<!--
+  iOS Info.plist additions for MS Hospital Diversion
+  ─────────────────────────────────────────────────
+  After running: npx cap add ios
+
+  Open ios/App/App/Info.plist in Xcode and add these keys,
+  OR merge them manually into the existing Info.plist file.
+
+  These entries are REQUIRED by Apple for App Store submission.
+-->
+
+<plist version="1.0">
+<dict>
+
+  <!-- ── App Identity ─────────────────────────────────── -->
+  <key>CFBundleDisplayName</key>
+  <string>MS Diversion</string>
+
+  <key>CFBundleIdentifier</key>
+  <string>com.msems.hospitaldiversion</string>
+
+  <key>CFBundleShortVersionString</key>
+  <string>1.0.0</string>
+
+  <key>CFBundleVersion</key>
+  <string>1</string>
+
+  <!-- ── GPS / Location ────────────────────────────────── -->
+  <!-- Required: App Store will REJECT without these -->
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>MS Hospital Diversion uses your location to find the nearest accepting hospitals and calculate drive times for your unit.</string>
+
+  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+  <string>MS Hospital Diversion uses your location in the background to continuously update nearest hospital distances for active EMS units.</string>
+
+  <key>NSLocationAlwaysUsageDescription</key>
+  <string>MS Hospital Diversion uses your location to provide real-time nearest hospital routing for EMS personnel.</string>
+
+  <!-- ── Local Notifications ───────────────────────────── -->
+  <key>UIBackgroundModes</key>
+  <array>
+    <string>fetch</string>
+    <string>remote-notification</string>
+  </array>
+
+  <!-- ── Network Security ──────────────────────────────── -->
+  <key>NSAppTransportSecurity</key>
+  <dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <false/>
+  </dict>
+
+  <!-- ── UI / Display ──────────────────────────────────── -->
+  <key>UIStatusBarStyle</key>
+  <string>UIStatusBarStyleLightContent</string>
+
+  <key>UIStatusBarHidden</key>
+  <false/>
+
+  <key>UIViewControllerBasedStatusBarAppearance</key>
+  <true/>
+
+  <key>UISupportedInterfaceOrientations</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+    <string>UIInterfaceOrientationPortraitUpsideDown</string>
+  </array>
+
+  <key>UISupportedInterfaceOrientations~ipad</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+    <string>UIInterfaceOrientationPortraitUpsideDown</string>
+    <string>UIInterfaceOrientationLandscapeLeft</string>
+    <string>UIInterfaceOrientationLandscapeRight</string>
+  </array>
+
+  <!-- ── Required device capabilities ─────────────────── -->
+  <key>UIRequiredDeviceCapabilities</key>
+  <array>
+    <string>armv7</string>
+  </array>
+
+</dict>
+</plist>
