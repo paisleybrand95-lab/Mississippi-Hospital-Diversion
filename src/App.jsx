@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const HOSPITALS = [
   { id: 1, name: "UMMC", full: "University of MS Medical Center", city: "Jackson", region: "Central", lat: 32.535, lng: -90.178, level: "I", beds: 695, specialty: ["Trauma L1","Burn","Cardiac","Neuro","Pediatric"] },
@@ -533,7 +533,6 @@ const AlertsFeed = ({ alerts, hospitals }) => {
   return (
     <div style={{ padding: "12px 16px" }}>
       {alerts.slice().reverse().map(a => {
-        const from = STATUS_CONFIG[a.prevStatus];
         const to = STATUS_CONFIG[a.newStatus];
         return (
           <div key={a.id} style={{ background: "#0d1117", border: `1px solid ${to.color}30`,
@@ -641,7 +640,7 @@ export default function App() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [unitId, setUnitId] = useState("");
   const [showFavs, setShowFavs] = useState(false);
-  const [tick, setTick] = useState(0);
+  const [, setTick] = useState(0);
 
   // Simulate live updates
   useEffect(() => {
