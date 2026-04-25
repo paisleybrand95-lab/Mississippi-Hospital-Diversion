@@ -1,28 +1,28 @@
 import { useState, useEffect } from "react";
 
 const HOSPITALS = [
-  { id: 1, name: "UMMC", full: "University of MS Medical Center", city: "Jackson", region: "Central", lat: 32.535, lng: -90.178, level: "I", beds: 695, specialty: ["Trauma L1","Burn","Cardiac","Neu[...]
-  { id: 2, name: "Baptist Medical", full: "Baptist Medical Center", city: "Jackson", region: "Central", lat: 32.298, lng: -90.184, level: "II", beds: 472, specialty: ["Cardiac","Stroke","Orthopedic[...]
+  { id: 1, name: "UMMC", full: "University of MS Medical Center", city: "Jackson", region: "Central", lat: 32.535, lng: -90.178, level: "I", beds: 695, specialty: ["Trauma L1","Burn","Cardiac","Neuro"] },
+  { id: 2, name: "Baptist Medical", full: "Baptist Medical Center", city: "Jackson", region: "Central", lat: 32.298, lng: -90.184, level: "II", beds: 472, specialty: ["Cardiac","Stroke","Orthopedic"] },
   { id: 3, name: "St. Dominic", full: "St. Dominic Hospital", city: "Jackson", region: "Central", lat: 32.308, lng: -90.206, level: "III", beds: 535, specialty: ["Cardiac","Stroke","OB"] },
   { id: 4, name: "Merit Health Central", full: "Merit Health Central", city: "Jackson", region: "Central", lat: 32.277, lng: -90.158, level: "III", beds: 319, specialty: ["General","OB"] },
-  { id: 5, name: "Merit Health River Oaks", full: "Merit Health River Oaks", city: "Flowood", region: "Central", lat: 32.333, lng: -90.132, level: "III", beds: 158, specialty: ["General","Ortho"] }[...]
+  { id: 5, name: "Merit Health River Oaks", full: "Merit Health River Oaks", city: "Flowood", region: "Central", lat: 32.333, lng: -90.132, level: "III", beds: 158, specialty: ["General","Ortho"] },
   { id: 6, name: "Woman's Hospital", full: "Woman's Hospital", city: "Jackson", region: "Central", lat: 32.372, lng: -90.168, level: "III", beds: 180, specialty: ["OB","Gynecology","NICU"] },
-  { id: 7, name: "Forrest General", full: "Forrest General Hospital", city: "Hattiesburg", region: "South", lat: 31.327, lng: -89.296, level: "II", beds: 537, specialty: ["Trauma","Cardiac","Strok[...]
+  { id: 7, name: "Forrest General", full: "Forrest General Hospital", city: "Hattiesburg", region: "South", lat: 31.327, lng: -89.296, level: "II", beds: 537, specialty: ["Trauma","Cardiac","Stroke"] },
   { id: 8, name: "Wesley Medical", full: "Wesley Medical Center", city: "Hattiesburg", region: "South", lat: 31.302, lng: -89.281, level: "III", beds: 211, specialty: ["General","Cardiac"] },
-  { id: 9, name: "Memorial Gulfport", full: "Memorial Hospital at Gulfport", city: "Gulfport", region: "Coast", lat: 30.388, lng: -89.057, level: "II", beds: 445, specialty: ["Trauma","Cardiac","S[...]
-  { id: 10, name: "Singing River", full: "Singing River Health System", city: "Pascagoula", region: "Coast", lat: 30.359, lng: -88.563, level: "II", beds: 457, specialty: ["Trauma","Cardiac","OB"][...]
+  { id: 9, name: "Memorial Gulfport", full: "Memorial Hospital at Gulfport", city: "Gulfport", region: "Coast", lat: 30.388, lng: -89.057, level: "II", beds: 445, specialty: ["Trauma","Cardiac","Stroke"] },
+  { id: 10, name: "Singing River", full: "Singing River Health System", city: "Pascagoula", region: "Coast", lat: 30.359, lng: -88.563, level: "II", beds: 457, specialty: ["Trauma","Cardiac","OB"] },
   { id: 11, name: "Ocean Springs", full: "Ocean Springs Hospital", city: "Ocean Springs", region: "Coast", lat: 30.411, lng: -88.830, level: "III", beds: 175, specialty: ["General","OB"] },
   { id: 12, name: "Garden Park", full: "Garden Park Medical Center", city: "Gulfport", region: "Coast", lat: 30.393, lng: -89.073, level: "III", beds: 130, specialty: ["General","Ortho"] },
-  { id: 13, name: "Anderson Regional", full: "Anderson Regional Medical Center", city: "Meridian", region: "East", lat: 32.371, lng: -88.703, level: "II", beds: 260, specialty: ["Cardiac","Stroke"[...]
+  { id: 13, name: "Anderson Regional", full: "Anderson Regional Medical Center", city: "Meridian", region: "East", lat: 32.371, lng: -88.703, level: "II", beds: 260, specialty: ["Cardiac","Stroke"] },
   { id: 14, name: "Rush Foundation", full: "Rush Foundation Hospital", city: "Meridian", region: "East", lat: 32.364, lng: -88.697, level: "III", beds: 182, specialty: ["General","Cardiac"] },
-  { id: 15, name: "NMMC Tupelo", full: "North MS Medical Center", city: "Tupelo", region: "North", lat: 34.248, lng: -88.746, level: "II", beds: 650, specialty: ["Trauma","Cardiac","Stroke","Cance[...]
-  { id: 16, name: "Baptist North MS", full: "Baptist Memorial Hosp — North MS", city: "Oxford", region: "North", lat: 34.366, lng: -89.518, level: "III", beds: 217, specialty: ["General","Cardia[...]
-  { id: 17, name: "Delta Regional", full: "Delta Regional Medical Center", city: "Greenville", region: "Delta", lat: 33.408, lng: -91.059, level: "II", beds: 189, specialty: ["Cardiac","Stroke","G[...]
-  { id: 18, name: "South Central Regional", full: "South Central Regional Medical", city: "Laurel", region: "South", lat: 31.694, lng: -89.131, level: "III", beds: 180, specialty: ["General","Card[...]
-  { id: 19, name: "King's Daughters", full: "King's Daughters Medical Center", city: "Brookhaven", region: "South", lat: 31.579, lng: -90.444, level: "III", beds: 122, specialty: ["General","OB"] [...]
+  { id: 15, name: "NMMC Tupelo", full: "North MS Medical Center", city: "Tupelo", region: "North", lat: 34.248, lng: -88.746, level: "II", beds: 650, specialty: ["Trauma","Cardiac","Stroke","Cancer"] },
+  { id: 16, name: "Baptist North MS", full: "Baptist Memorial Hosp — North MS", city: "Oxford", region: "North", lat: 34.366, lng: -89.518, level: "III", beds: 217, specialty: ["General","Cardiac"] },
+  { id: 17, name: "Delta Regional", full: "Delta Regional Medical Center", city: "Greenville", region: "Delta", lat: 33.408, lng: -91.059, level: "II", beds: 189, specialty: ["Cardiac","Stroke","General"] },
+  { id: 18, name: "South Central Regional", full: "South Central Regional Medical", city: "Laurel", region: "South", lat: 31.694, lng: -89.131, level: "III", beds: 180, specialty: ["General","Cardiac"] },
+  { id: 19, name: "King's Daughters", full: "King's Daughters Medical Center", city: "Brookhaven", region: "South", lat: 31.579, lng: -90.444, level: "III", beds: 122, specialty: ["General","OB"] },
   { id: 20, name: "SW MS Regional", full: "SW Mississippi Regional Medical", city: "McComb", region: "South", lat: 31.245, lng: -90.453, level: "III", beds: 143, specialty: ["General","OB"] },
   { id: 21, name: "Oktibbeha County", full: "Oktibbeha County Hospital", city: "Starkville", region: "East", lat: 33.460, lng: -88.818, level: "III", beds: 95, specialty: ["General"] },
-  { id: 22, name: "Merit Health Natchez", full: "Merit Health Natchez", city: "Natchez", region: "Southwest", lat: 31.558, lng: -91.403, level: "III", beds: 179, specialty: ["General","Cardiac"] }[...]
+  { id: 22, name: "Merit Health Natchez", full: "Merit Health Natchez", city: "Natchez", region: "Southwest", lat: 31.558, lng: -91.403, level: "III", beds: 179, specialty: ["General","Cardiac"] },
   { id: 23, name: "Winston Medical", full: "Winston Medical Center", city: "Louisville", region: "East", lat: 33.123, lng: -89.057, level: "IV", beds: 65, specialty: ["General"] },
   { id: 24, name: "NMMC Eupora", full: "North MS Medical Ctr — Eupora", city: "Eupora", region: "North", lat: 33.540, lng: -89.289, level: "IV", beds: 72, specialty: ["General"] },
 ];
@@ -126,10 +126,10 @@ const Icon = ({ name, size = 20, color = "currentColor" }) => {
   const paths = {
     list:     "M3 4h18M3 9h18M3 14h18M3 19h18",
     map:      "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7",
-    bell:     "M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0[...]
-    settings: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066[...]
+    bell:     "M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m0 0h6m-6 0H9",
+    settings: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z",
     heart:    "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z",
-    phone:    "M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 0[...]
+    phone:    "M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1a17 17 0 01-17-17V5a2 2 0 012-2z",
     nav:      "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7",
     refresh:  "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15",
     edit:     "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z",
@@ -137,9 +137,9 @@ const Icon = ({ name, size = 20, color = "currentColor" }) => {
     x:        "M6 18L18 6M6 6l12 12",
     chevron:  "M9 5l7 7-7 7",
     info:     "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
-    star:     "M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.9[...]
+    star:     "M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.175 0l-3.976 2.888c-.783.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.381-1.81.588-1.81h4.914a1 1 0 00.95-.69l1.519-4.674z",
     search:   "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z",
-    ambulance:"M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1[...]
+    ambulance:"M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1m-7-1a1 1 0 00-1-1H4m16 0a1 1 0 001-1v-2.586a1 1 0 00-.293-.707l-3.414-3.414A1 1 0 0016.586 6H14a1 1 0 00-1 1v8a1 1 0 001 1h1m-6 0h-1a1 1 0 00-1 1v2a1 1 0 001 1h1m0 0h4m4 0h1a1 1 0 001-1v-2a1 1 0 00-1-1h-1",
     hospital: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4",
   };
   return (
