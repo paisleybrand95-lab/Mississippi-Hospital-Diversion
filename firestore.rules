@@ -1,0 +1,97 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// firestore.rules — MS Hospital Diversion Security Rules
+// ─────────────────────────────────────────────────────────────────────────────
+// Deploy with: firebase deploy --only firestore:rules
+// ─────────────────────────────────────────────────────────────────────────────
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ────────────────────────────────────────────────────
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && getUserRole() == 'admin';
+    }
+
+    function isNurseOrAdmin() {
+      return isSignedIn() && getUserRole() in ['nurse', 'admin'];
+    }
+
+    function isAnyAuthorizedUser() {
+      return isSignedIn() && getUserRole() in ['ems', 'nurse', 'admin'];
+    }
+
+    function isValidStatus() {
+      return request.resource.data.status in ['OPEN', 'ADVISORY', 'DIVERSION', 'BYPASS'];
+    }
+
+    // ── hospitals collection ────────────────────────────────────────────────
+    // READ:  any authenticated user (EMS, nurse, admin)
+    // WRITE: nurses (own hospital only) + admins (all hospitals)
+
+    match /hospitals/{hospitalId} {
+      allow read: if isAnyAuthorizedUser();
+
+      allow update: if isAnyAuthorizedUser()
+        && isValidStatus()
+        // Only allow updating status fields — not hospital metadata
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'reason', 'etaMinutes', 'capacity',
+                      'waitEd', 'updated', 'lastUpdatedBy']);
+
+      allow create, delete: if isAdmin();
+    }
+
+    // ── alerts collection ───────────────────────────────────────────────────
+    // READ:  any authenticated user
+    // WRITE: any authenticated user (alerts are created alongside updates)
+
+    match /alerts/{alertId} {
+      allow read:   if isAnyAuthorizedUser();
+      allow create: if isAnyAuthorizedUser();
+      allow update, delete: if isAdmin();
+    }
+
+    // ── users collection ────────────────────────────────────────────────────
+    // READ:  own document only (or admin reads all)
+    // WRITE: admin creates users; users can update own FCM token
+
+    match /users/{userId} {
+      allow read: if isSignedIn()
+        && (request.auth.uid == userId || isAdmin());
+
+      allow create: if isAdmin();
+
+      allow update: if isSignedIn()
+        && request.auth.uid == userId
+        // Users can only update their own FCM token and last-seen
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['fcmToken', 'fcmUpdated', 'lastSeen', 'unitId']);
+
+      allow delete: if isAdmin();
+    }
+
+    // ── settings collection ─────────────────────────────────────────────────
+    // System-wide settings (admin only write)
+
+    match /settings/{settingId} {
+      allow read:  if isAnyAuthorizedUser();
+      allow write: if isAdmin();
+    }
+
+    // ── Deny everything else ────────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

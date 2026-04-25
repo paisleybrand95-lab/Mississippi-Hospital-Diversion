@@ -1,0 +1,29 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "alerts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "time",        "order": "DESCENDING" },
+        { "fieldPath": "hospitalId",  "order": "ASCENDING"  }
+      ]
+    },
+    {
+      "collectionGroup": "alerts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "newStatus",   "order": "ASCENDING"  },
+        { "fieldPath": "time",        "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "hospitals",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "region",      "order": "ASCENDING"  },
+        { "fieldPath": "status",      "order": "ASCENDING"  }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

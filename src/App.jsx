@@ -1,4 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import {
+  subscribeToHospitals,
+  subscribeToAlerts,
+  publishHospitalUpdate,
+  requestNotificationPermission,
+  onForegroundMessage,
+} from "./firebase";
+
+// Set true once your .env.local has real Firebase credentials
+const USE_FIREBASE = !!(
+  process.env.REACT_APP_FIREBASE_API_KEY &&
+  process.env.REACT_APP_FIREBASE_API_KEY !== "YOUR_API_KEY_HERE"
+);
 
 const HOSPITALS = [
   { id: 1, name: "UMMC", full: "University of MS Medical Center", city: "Jackson", region: "Central", lat: 32.535, lng: -90.178, level: "I", beds: 695, specialty: ["Trauma L1","Burn","Cardiac","Neuro"] },
@@ -629,24 +642,28 @@ const Settings = ({ unitId, setUnitId, favorites, hospitals }) => {
   );
 };
 
-// ── Main App ──────────────────────────────────────────────────────────────
+// ── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
-  const [hospitals, setHospitals] = useState(initHospitalState);
-  const [alerts, setAlerts] = useState([]);
-  const [tab, setTab] = useState("status");
-  const [selected, setSelected] = useState(null);
-  const [search, setSearch] = useState("");
+  const [hospitals,    setHospitals]    = useState(initHospitalState);
+  const [alerts,       setAlerts]       = useState([]);
+  const [tab,          setTab]          = useState("status");
+  const [selected,     setSelected]     = useState(null);
+  const [search,       setSearch]       = useState("");
   const [regionFilter, setRegionFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
-  const [unitId, setUnitId] = useState("");
-  const [showFavs, setShowFavs] = useState(false);
+  const [unitId,       setUnitId]       = useState("");
+  const [showFavs,     setShowFavs]     = useState(false);
+  const [fbStatus,     setFbStatus]     = useState(
+    USE_FIREBASE ? "connecting" : "demo"
+  ); // "connecting" | "live" | "demo" | "error"
 
-  // Simulate live updates
+  // ── Firebase real-time subscriptions ─────────────────────────────────────
   useEffect(() => {
-    const interval = setInterval(() => {
-      setHospitals(prev => {
-        const next = prev.map(h => {
-          if (Math.random() > 0.03) return h; // ~3% chance per hospital per 8s
+    if (!USE_FIREBASE) {
+      // Demo mode: run local simulation
+      const interval = setInterval(() => {
+        setHospitals(prev => prev.map(h => {
+          if (Math.random() > 0.03) return h;
           const newStatus = randomStatus();
           if (newStatus === h.status) return h;
           const updated = {
@@ -654,34 +671,93 @@ export default function App() {
             reason: randomReason(newStatus),
             etaMinutes: randomMinutes(newStatus),
             capacity: randomCapacity(newStatus),
-            waitEd: newStatus === "OPEN" ? Math.floor(Math.random()*25)+5 : Math.floor(Math.random()*90)+30,
+            waitEd: newStatus === "OPEN"
+              ? Math.floor(Math.random()*25)+5
+              : Math.floor(Math.random()*90)+30,
             lastUpdate: new Date(),
           };
-          setAlerts(a => [...a.slice(-49), generateAlert(updated, h.status, newStatus)]);
+          setAlerts(a => [...a.slice(-59), generateAlert(updated, h.status, newStatus)]);
           return updated;
-        });
-        return next;
+        }));
+      }, 8000);
+      return () => clearInterval(interval);
+    }
+
+    // Firebase mode: subscribe to Firestore
+    setFbStatus("connecting");
+
+    const unsubHospitals = subscribeToHospitals((data) => {
+      setHospitals(prev => {
+        // Merge Firebase data with local fav state
+        const favMap = Object.fromEntries(prev.map(h => [String(h.id), h.favorite]));
+        return data.map(h => ({ ...h, favorite: favMap[String(h.id)] || false }));
       });
-    }, 8000);
-    return () => clearInterval(interval);
+      setFbStatus("live");
+    });
+
+    const unsubAlerts = subscribeToAlerts((data) => {
+      setAlerts(data);
+    });
+
+    // Foreground push notification handler
+    const unsubFCM = onForegroundMessage((payload) => {
+      console.log("Foreground FCM:", payload.notification?.title);
+      // Optionally show an in-app toast here
+    });
+
+    return () => {
+      unsubHospitals();
+      unsubAlerts();
+      if (unsubFCM) unsubFCM();
+    };
   }, []);
 
-  const handleFavorite = (id) => {
+  // ── Request notification permission once connected ────────────────────────
+  useEffect(() => {
+    if (USE_FIREBASE && fbStatus === "live") {
+      requestNotificationPermission(null).catch(console.warn);
+    }
+  }, [fbStatus]);
+
+  // ── Favorites (local state only — not persisted to Firestore) ────────────
+  const handleFavorite = useCallback((id) => {
     setHospitals(prev => prev.map(h => h.id === id ? { ...h, favorite: !h.favorite } : h));
     if (selected?.id === id) setSelected(prev => ({ ...prev, favorite: !prev.favorite }));
-  };
+  }, [selected]);
 
-  const handleUpdate = (id, status, reason, etaMinutes) => {
-    setHospitals(prev => prev.map(h => {
-      if (h.id !== id) return h;
-      const updated = { ...h, status, reason, etaMinutes, lastUpdate: new Date(),
-        capacity: randomCapacity(status), waitEd: status === "OPEN" ? 15 : 60 };
-      setAlerts(a => [...a.slice(-49), generateAlert(updated, h.status, status)]);
-      return updated;
-    }));
-    setSelected(prev => prev && prev.id === id
-      ? { ...prev, status, reason, etaMinutes, lastUpdate: new Date() } : prev);
-  };
+  // ── Publish status update ─────────────────────────────────────────────────
+  const handleUpdate = useCallback(async (id, status, reason, etaMinutes) => {
+    if (USE_FIREBASE) {
+      try {
+        await publishHospitalUpdate({
+          hospitalId: id,
+          status,
+          reason,
+          etaMinutes,
+          updatedBy: { uid: unitId || "ems", role: "ems", displayName: unitId || "EMS" },
+        });
+        // Firestore subscription will update state automatically
+      } catch (err) {
+        console.error("Update failed:", err);
+        alert("Update failed. Check connection and try again.");
+      }
+    } else {
+      // Demo mode: update locally
+      setHospitals(prev => prev.map(h => {
+        if (h.id !== id) return h;
+        const updated = {
+          ...h, status, reason, etaMinutes, lastUpdate: new Date(),
+          capacity: randomCapacity(status),
+          waitEd: status === "OPEN" ? 15 : 60,
+        };
+        setAlerts(a => [...a.slice(-59), generateAlert(updated, h.status, status)]);
+        return updated;
+      }));
+      if (selected?.id === id) {
+        setSelected(prev => prev ? { ...prev, status, reason, etaMinutes, lastUpdate: new Date() } : null);
+      }
+    }
+  }, [unitId, selected]);
 
   const favorites = hospitals.filter(h => h.favorite).map(h => h.id);
 
@@ -734,10 +810,7 @@ export default function App() {
               </div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 4 }}>
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#00e676",
-              boxShadow: "0 0 6px #00e676", animation: "pulse 2s infinite", marginTop: 6 }} />
-          </div>
+
         </div>
 
         {/* Summary Strip */}
