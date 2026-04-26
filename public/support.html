@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Support — MS Hospital Diversion</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#06090f; --surface:#0d1117; --border:#1e2435;
+      --red:#c62828; --blue:#60a5fa; --text:#e8eaf0;
+      --muted:#94a3b8; --dim:#4b5563;
+      --mono:'JetBrains Mono','Courier New',monospace;
+    }
+    body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; font-size:15px; line-height:1.7; }
+    header { background:var(--surface); border-bottom:1px solid var(--border); padding:20px 24px; display:flex; align-items:center; gap:14px; }
+    .logo { width:44px; height:44px; background:linear-gradient(145deg,#0a1628,#1a0808); border:1.5px solid var(--red); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow:0 0 14px rgba(198,40,40,0.35); flex-shrink:0; }
+    .logo-text .title { font-family:var(--mono); font-size:15px; font-weight:800; color:#fff; letter-spacing:0.08em; }
+    .logo-text .sub { font-size:11px; color:var(--dim); letter-spacing:0.06em; }
+    main { max-width:760px; margin:0 auto; padding:40px 24px 80px; }
+    h1 { font-family:var(--mono); font-size:22px; font-weight:800; color:var(--text); letter-spacing:0.06em; margin-bottom:6px; }
+    .subtitle { font-size:13px; color:var(--dim); margin-bottom:32px; padding-bottom:20px; border-bottom:1px solid var(--border); }
+    .card { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--red); border-radius:8px; padding:20px 22px; margin-bottom:16px; }
+    h2 { font-family:var(--mono); font-size:12px; font-weight:700; color:var(--red); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:10px; }
+    p { color:var(--muted); margin-bottom:10px; }
+    p:last-child { margin-bottom:0; }
+    ul { color:var(--muted); padding-left:20px; margin-bottom:10px; }
+    li { margin-bottom:6px; }
+    strong { color:var(--text); }
+    a { color:var(--blue); text-decoration:none; }
+    .faq-q { color:var(--text); font-weight:600; margin-bottom:4px; }
+    .faq-a { color:var(--muted); margin-bottom:16px; }
+    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+    .contact-item { background:#0a1220; border:1px solid #1e3040; border-radius:8px; padding:14px 16px; }
+    .contact-label { font-size:10px; color:var(--dim); font-family:var(--mono); letter-spacing:0.1em; margin-bottom:4px; }
+    .contact-value { font-size:13px; color:var(--blue); }
+    footer { text-align:center; padding:30px 24px; font-size:12px; color:var(--dim); border-top:1px solid var(--border); }
+    @media(max-width:500px) { .contact-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">⚡</div>
+  <div class="logo-text">
+    <div class="title">MS HOSPITAL DIVERSION</div>
+    <div class="sub">MISSISSIPPI EMS NETWORK</div>
+  </div>
+</header>
+
+<main>
+  <h1>Support</h1>
+  <div class="subtitle">Help for EMS crews, charge nurses, and supervisors</div>
+
+  <!-- DEMO CREDENTIALS -->
+  <div class="card">
+    <h2>Demo / Test Credentials</h2>
+    <p>Use these to test the app before your agency account is provisioned:</p>
+    <ul>
+      <li><strong>EMS Crew</strong> — Unit ID: <code>MED-7</code> · PIN: <code>1234</code></li>
+      <li><strong>Charge Nurse</strong> — Select any hospital · PIN: <code>5678</code></li>
+      <li><strong>Supervisor / Admin</strong> — Admin ID: <code>ADMIN</code> · PIN: <code>9999</code></li>
+    </ul>
+  </div>
+
+  <!-- FAQ -->
+  <div class="card">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-q">How do I get a real login account?</div>
+    <div class="faq-a">Contact your agency EMS director or hospital ED manager. Accounts are provisioned by your organization's designated administrator. Email <a href="mailto:support@lifestillgoeson.com">support@lifestillgoeson.com</a> if you need help identifying your admin.</div>
+
+    <div class="faq-q">How do I update my hospital's diversion status?</div>
+    <div class="faq-a">Log in as a Charge Nurse, tap your facility on the Status Board or the "My Facility" tab, then tap "Update Diversion Status." Select the new status, reason, and estimated clear time, then tap Publish. The update is live within seconds across all EMS devices statewide.</div>
+
+    <div class="faq-q">How do EMS crews use the Nearest Hospitals screen?</div>
+    <div class="faq-a">Tap the "Nearest" tab (compass icon), then tap "Get My Location." The app uses your GPS to rank all 24 Mississippi hospitals by distance and estimated drive time, filtered by acceptance status.</div>
+
+    <div class="faq-q">Why is a hospital showing the wrong status?</div>
+    <div class="faq-a">Status updates are published by hospital charge nurses or EMS supervisors. If a status appears stale or incorrect, contact the hospital's ED directly using the phone number on the Hospital Detail screen. You can also tap "EMS Status Update" to submit a field correction.</div>
+
+    <div class="faq-q">I'm not receiving push notifications — how do I fix this?</div>
+    <div class="faq-a">On iPhone: Settings → MS Diversion → Notifications → Allow Notifications. On Android: Settings → Apps → MS Diversion → Notifications → Enable. Also ensure the app is not in Low Power Mode, which can delay notifications.</div>
+
+    <div class="faq-q">How do I add hospitals to my Favorites list?</div>
+    <div class="faq-a">Tap the ★ star icon on any hospital card or on the Hospital Detail screen. Saved hospitals appear in your Settings → Saved Hospitals list. Tap "★ FAV" filter on the Status Board to show favorites only.</div>
+
+    <div class="faq-q">What does BYPASS mean vs DIVERSION?</div>
+    <div class="faq-a"><strong>ADVISORY</strong> — hospital is approaching capacity; consider alternatives. <strong>DIVERSION</strong> — hospital is requesting units be rerouted; use nearest alternative unless critical. <strong>BYPASS</strong> — hospital is closed to EMS transport; do not transport except life threat with no alternative.</div>
+
+    <div class="faq-q">Is patient data ever transmitted through this app?</div>
+    <div class="faq-a">No. This app transmits operational diversion status only — not patient records, PHI, or any individually identifiable health information. See our <a href="privacy-policy.html">Privacy Policy</a> for full details.</div>
+
+    <div class="faq-q">The app isn't loading — what should I do?</div>
+    <div class="faq-a">Check your internet connection. Close and reopen the app. If the problem persists, log out and log back in. If issues continue after 5 minutes, contact support below — there may be a server maintenance window.</div>
+  </div>
+
+  <!-- ROLES GUIDE -->
+  <div class="card">
+    <h2>Role Guide</h2>
+    <ul>
+      <li><strong>EMS Crew</strong> — Read-only access to all hospital statuses statewide. Can view map, nearest hospitals, alerts feed, and hospital detail. Can submit field status observations.</li>
+      <li><strong>Charge Nurse</strong> — Full read access plus ability to update your assigned hospital's diversion status, reason, and estimated clear time.</li>
+      <li><strong>Supervisor / Admin</strong> — Full read/write access to all hospitals. Access to admin dashboard with system-wide overview and region breakdown. Can manage user accounts.</li>
+    </ul>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="card">
+    <h2>Contact Support</h2>
+    <p>For account setup, technical issues, or feature requests:</p>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="contact-label">EMAIL</div>
+        <div class="contact-value"><a href="mailto:support@lifestillgoeson.com">support@lifestillgoeson.com</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">WEBSITE</div>
+        <div class="contact-value"><a href="https://www.lifestillgoeson.com" target="_blank">lifestillgoeson.com</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">PRIVACY POLICY</div>
+        <div class="contact-value"><a href="privacy-policy.html">View Policy</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-label">RESPONSE TIME</div>
+        <div class="contact-value" style="color:var(--muted)">Within 24 hours</div>
+      </div>
+    </div>
+    <p style="margin-top:14px;font-size:13px;">For <strong>urgent operational issues</strong> affecting active EMS operations, contact the Mississippi EMS Bureau at MSDH directly.</p>
+  </div>
+</main>
+
+<footer>
+  © 2025 Life Still Goes On Publishing · Bryan "BW" White · Pearl, Mississippi<br/>
+  <a href="https://www.lifestillgoeson.com">www.lifestillgoeson.com</a> ·
+  <a href="privacy-policy.html">Privacy Policy</a>
+</footer>
+</body>
+</html>
