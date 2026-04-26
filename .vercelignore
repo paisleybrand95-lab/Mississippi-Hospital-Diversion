@@ -1,7 +1,14 @@
+# Capacitor native platform folders
 ios/
 android/
+
+# Firebase functions — deployed separately
 functions/
-scripts/
+
+# These scripts are NOT ignored — inject-firebase-sw.js runs during build
+# scripts/   <-- intentionally NOT ignored
+
+# Assets and docs not needed for web build
 assets/
 store-metadata/
 ios-config/

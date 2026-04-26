@@ -23,6 +23,7 @@
     "@capacitor/android": "8.3.1"
   },
   "scripts": {
+    "prebuild": "node scripts/inject-firebase-sw.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
