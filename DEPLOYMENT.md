@@ -1,5 +1,5 @@
 # MS Hospital Diversion — Capacitor Deployment Guide
-# From GitHub → iOS App Store & Google Play
+# From GitHub → iOS App Store, Google Play & Amazon Appstore
 
 ---
 
@@ -174,12 +174,167 @@ To test on a real device with hot reload:
 
 ---
 
+
+
 ## NEXT STEPS AFTER LAUNCH
 
-1. **Real data backend** — Connect to Firebase or Supabase for live hospital updates
-2. **Push notifications** — Add Firebase Cloud Messaging for diversion alerts
+1. **Real data backend** — Firebase Firestore (already built — add .env credentials)
+2. **Push notifications** — Firebase Cloud Messaging (already built — add VAPID key)
 3. **MSDH API** — Contact MS Dept of Health to explore official data integration
-4. **Authentication** — Replace demo PINs with secure auth (Supabase Auth or AWS Cognito)
+4. **Authentication** — Replace demo PINs with secure auth (Firebase Auth already wired)
+
+---
+
+## AMAZON APPSTORE SUBMISSION
+
+The Amazon Appstore is FREE to join (no annual fee) and reaches
+Fire tablets widely used in healthcare and EMS dispatch settings.
+Your Android build (same APK as Google Play) works on Amazon Fire OS 5+.
+
+### STEP A — Create Amazon Developer Account
+
+1. Go to **https://developer.amazon.com**
+2. Click **Sign in** → use or create an Amazon account
+3. Click **Get Started** under Apps & Games
+4. Complete developer profile (name, address, tax info)
+5. Account creation is **free** — no annual fee
+
+---
+
+### STEP B — Build a Signed APK (Android Studio)
+
+Amazon prefers `.apk` over `.aab` (unlike Google Play).
+
+```bash
+# Open Android Studio
+npm run cap:android
+
+# In Android Studio:
+# Build → Generate Signed Bundle / APK
+# → Choose APK (not Bundle)
+# → Create or select your keystore
+#   Key alias: ms-diversion-key
+#   Key validity: 25 years
+# → Build Type: release
+# → Finish
+```
+
+Your signed APK will be at:
+`android/app/release/app-release.apk`
+
+**Save your keystore file and password safely — you need it for every future update.**
+
+---
+
+### STEP C — Submit to Amazon Appstore
+
+1. Go to **https://developer.amazon.com/apps-and-games**
+2. Click **Add New App** → select **Android**
+3. Fill in each tab:
+
+**General Information tab:**
+```
+App title:    MS Hospital Diversion
+App SKU:      MSHOSDIV001
+Category:     Medical
+Content rating: General
+```
+
+**Availability & Pricing tab:**
+```
+Price:        Free
+Countries:    United States (at minimum)
+```
+
+**Description tab:**
+- Paste content from `store-metadata/amazon-appstore-listing.md`
+- Short Description: first paragraph of that file
+- Long Description: full long description section
+- Keywords: the keywords listed (one per line in Amazon's UI)
+
+**Images & Multimedia tab:**
+```
+App icon:      512×512 PNG (export from assets/icon-source.svg)
+Screenshots:   At least 3, recommended 5
+               Sizes: 1024×600 or 1280×720 or 1920×1080
+```
+
+**Content Rating tab:**
+- Answer the questionnaire (answers in amazon-appstore-listing.md)
+- Expected result: **General**
+
+**Binary File(s) tab:**
+- Upload `android/app/release/app-release.apk`
+- Minimum OS: Fire OS 5 (Android 5.1)
+- Device support: check all Fire tablet sizes
+
+**Notes to Reviewers:**
+```
+Demo credentials:
+  EMS Crew:  Unit ID = MED-7  |  PIN = 1234
+  Admin:     Admin ID = ADMIN  |  PIN = 9999
+  Nurse:     Select UMMC       |  PIN = 5678
+
+Public safety app for MS EMS personnel. No PHI collected.
+Privacy Policy: https://ms-hospital-diversion.web.app/privacy-policy.html
+```
+
+4. Click **Submit App**
+5. Amazon review: **1–3 business days**
+
+---
+
+### STEP D — FCM Push Notifications on Fire OS
+
+Amazon Fire devices (Fire OS 5+) include Google Play Services compatibility.
+Your existing Firebase Cloud Messaging setup works without code changes.
+
+To verify: after installing on a Fire tablet, sign in as EMS and check
+that the Settings → Notifications toggle triggers an FCM token registration.
+
+---
+
+### Amazon vs Google Play vs Apple — Side by Side
+
+| Feature            | Apple App Store | Google Play  | Amazon Appstore |
+|--------------------|-----------------|--------------|-----------------|
+| Annual fee         | $99/yr          | $25 one-time | **Free**        |
+| Review time        | 1–7 days        | 1–3 days     | 1–3 days        |
+| Preferred format   | IPA (Xcode)     | AAB          | APK             |
+| Fire tablet support| No              | No           | **Yes**         |
+| FCM notifications  | APN (Apple)     | FCM          | FCM (Fire OS 5+)|
+| EMS/Medical reach  | High            | High         | Fire tablets    |
+
+---
+
+### ONGOING AMAZON UPDATE WORKFLOW
+
+Every time you release a new version:
+
+```bash
+# 1. Update version in android/app/build.gradle
+#    versionCode: increment by 1 (e.g. 1 → 2)
+#    versionName: update string (e.g. "1.0.1")
+
+# 2. Rebuild and sync
+npm run cap:build
+
+# 3. Generate new signed APK in Android Studio
+#    Build → Generate Signed Bundle/APK → APK → release
+
+# 4. In Amazon Developer Console:
+#    My Apps → MS Hospital Diversion → Add Upcoming Version
+#    Upload new APK → submit for review
+```
+
+---
+
+## STORE LISTING FILES
+
+| File | Contents |
+|------|----------|
+| `store-metadata/app-store-listing.md` | Apple App Store + Google Play metadata |
+| `store-metadata/amazon-appstore-listing.md` | Amazon Appstore metadata |
 
 ---
 
